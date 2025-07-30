@@ -1,6 +1,7 @@
 package directory.robert.discordutil;
 
 import net.dv8tion.jda.api.JDA;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import directory.robert.discordutil.events.listener;
 import directory.robert.discordutil.discordbot.DiscordBot;
@@ -16,14 +17,18 @@ public final class Discordutil extends JavaPlugin {
 
         saveDefaultConfig(); // copies default config.yml and puts it in plugin's data folder
 
-        String botkey = getConfig().getString("bot-token");
-        if (botkey == null) {
+        String botKey = getConfig().getString("bot-token");
+        String statusChannel = getConfig().getString("status-channel");
+        if (botKey == null) {
             throw new RuntimeException("Bot token has not been set!");
+        }
+        if (statusChannel == null) {
+            throw new RuntimeException("Status channel has not been set!");
         }
         enabled = true;
         if (enabled) {
             // start discord bot
-            DiscordBot = new DiscordBot(botkey);
+            DiscordBot = new DiscordBot(botKey, statusChannel);
             DiscordBot.start(); // runs bot on its own thread? so sigma.
             // register events
             getServer().getPluginManager().registerEvents(new listener(), this);
