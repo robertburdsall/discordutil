@@ -1,2 +1,4 @@
-directory\robert\discordutil\Discordutil.class
+directory\robert\discordutil\discordbot\DiscordBot.class
 directory\robert\discordutil\events\listener.class
+directory\robert\discordutil\discordbot\commands\BotCommands.class
+directory\robert\discordutil\Discordutil.class

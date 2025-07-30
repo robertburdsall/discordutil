@@ -10,7 +10,7 @@ public class listener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        System.out.println("player" + event.getPlayer().getDisplayName() + "has joined the server");
+        System.out.println("player " + event.getPlayer().getDisplayName() + " has joined the server");
     }
 
 
