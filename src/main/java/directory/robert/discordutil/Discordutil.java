@@ -12,8 +12,11 @@ public final class Discordutil extends JavaPlugin {
         System.out.println("Discordutil Plugin is enabling...");
 
         enabled = true;
+        if (enabled) {
+            // register events
+            getServer().getPluginManager().registerEvents(new listener(), this);
+        }
 
-        getServer().getPluginManager().registerEvents(new listener(enabled), this);
 
     }
 
