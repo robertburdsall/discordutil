@@ -1,10 +1,10 @@
 package directory.robert.discordutil.discordbot.events;
 
+import directory.robert.discordutil.Discordutil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import directory.robert.discordutil.discordbot.DiscordBot;
-import org.bukkit.event.Event;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -25,9 +25,14 @@ public class Eventhandler {
         // if the bot isn't running, return false
         if (!isActive()) { return false; }
 
+        // update playercount if configured to do so if "bot-status" is "PLAYERCOUNT"
+        if (Discordutil.playerStatus) {
+            DiscordBot.updatePlayerCount(1);
+        }
+
         // transitioning to embeds for important messages
         EmbedBuilder eb = new EmbedBuilder();
-        String thumbnail = "https://minotar.net/avatar/" + event.getPlayer().getUniqueId() +"/64.png";
+        String thumbnail = "https://minotar.net/avatar/" + event.getPlayer().getUniqueId() +"/32.png";
         eb.setThumbnail(thumbnail);
         eb.setTitle(event.getPlayer().getDisplayName() + " has joined the server!");
         eb.setColor(Color.green);
@@ -49,9 +54,14 @@ public class Eventhandler {
         // if the bot isn't running, return false
         if (!isActive()) { return false; }
 
+        // update playercount if configured to do so if "bot-status" is "PLAYERCOUNT"
+        if (Discordutil.playerStatus) {
+            DiscordBot.updatePlayerCount(0);
+        }
+
         // transitioning to embeds for important messages
         EmbedBuilder eb = new EmbedBuilder();
-        String thumbnail = "https://minotar.net/avatar/" + event.getPlayer().getUniqueId() +"/64.png";
+        String thumbnail = "https://minotar.net/avatar/" + event.getPlayer().getUniqueId() +"/32.png";
         eb.setThumbnail(thumbnail);
         eb.setTitle(event.getPlayer().getDisplayName() + " has left the server ):");
         eb.setColor(Color.red);

@@ -1,7 +1,6 @@
 package directory.robert.discordutil;
 
-import net.dv8tion.jda.api.JDA;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import directory.robert.discordutil.events.listener;
 import directory.robert.discordutil.discordbot.DiscordBot;
@@ -10,13 +9,16 @@ public final class Discordutil extends JavaPlugin {
     private boolean enabled = false;
     private DiscordBot DiscordBot;
     public static int playerCount;
+    public static boolean playerStatus;
 
     @Override
     public void onEnable() {
 
         System.out.println("Discordutil Plugin is enabling...");
-
+        /* configuration logic */
         saveDefaultConfig(); // copies default config.yml and puts it in plugin's data folder
+        getConfig().options().copyDefaults(true); // merges any new config changes
+        saveConfig(); // saves new merged config
 
         String botKey = getConfig().getString("bot-token");
         if (botKey == null) {
@@ -29,11 +31,15 @@ public final class Discordutil extends JavaPlugin {
         }
 
         String botStatus = getConfig().getString("bot-status");
-        if (botStatus == "PLAYERCOUNT") {
-            playerCount = 0;
+        if (botStatus.equals("PLAYERCOUNT")) {
+            playerCount = getServer().getOnlinePlayers().size();
+            playerStatus = true;
+        } else {
+            playerStatus = false;
         }
 
         enabled = true;
+        /* discord bot logic */
         if (enabled) {
             // start discord bot
             DiscordBot = new DiscordBot(botKey, statusChannel, botStatus);
@@ -41,8 +47,6 @@ public final class Discordutil extends JavaPlugin {
             // register events
             getServer().getPluginManager().registerEvents(new listener(), this);
         }
-
-
     }
 
     @Override
@@ -55,4 +59,10 @@ public final class Discordutil extends JavaPlugin {
             throw new RuntimeException(e);
         }
     }
+
+    public static void sendMessage(String message) {
+        Bukkit.getServer().broadcastMessage(message);
+        System.out.println("sending message!");
+    }
+
 }
