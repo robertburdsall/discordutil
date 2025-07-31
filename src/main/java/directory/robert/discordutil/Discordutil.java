@@ -9,6 +9,7 @@ import directory.robert.discordutil.discordbot.DiscordBot;
 public final class Discordutil extends JavaPlugin {
     private boolean enabled = false;
     private DiscordBot DiscordBot;
+    public static int playerCount;
 
     @Override
     public void onEnable() {
@@ -18,17 +19,24 @@ public final class Discordutil extends JavaPlugin {
         saveDefaultConfig(); // copies default config.yml and puts it in plugin's data folder
 
         String botKey = getConfig().getString("bot-token");
-        String statusChannel = getConfig().getString("status-channel");
         if (botKey == null) {
             throw new RuntimeException("Bot token has not been set!");
         }
+
+        String statusChannel = getConfig().getString("status-channel");
         if (statusChannel == null) {
             throw new RuntimeException("Status channel has not been set!");
         }
+
+        String botStatus = getConfig().getString("bot-status");
+        if (botStatus == "PLAYERCOUNT") {
+            playerCount = 0;
+        }
+
         enabled = true;
         if (enabled) {
             // start discord bot
-            DiscordBot = new DiscordBot(botKey, statusChannel);
+            DiscordBot = new DiscordBot(botKey, statusChannel, botStatus);
             DiscordBot.start(); // runs bot on its own thread? so sigma.
             // register events
             getServer().getPluginManager().registerEvents(new listener(), this);

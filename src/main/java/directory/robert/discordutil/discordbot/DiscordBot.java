@@ -13,6 +13,8 @@ public class DiscordBot extends Thread {
     private static JDA jda;
     private String token;
     private String statusChannel;
+    private String botStatus;
+    private static boolean playerCount = false;
     public static boolean running = false;
 
     public void run() {
@@ -20,29 +22,37 @@ public class DiscordBot extends Thread {
     }
 
     public void shutdown() {
+        Eventhandler.serverShutdown(); // send the server shutdown message, then stop the bot
         running = false;
         this.interrupt();
     }
 
-    public DiscordBot(String token, String statusChannel) {
+    public DiscordBot(String token, String statusChannel, String botStatus) {
         this.token = token;
         this.statusChannel = statusChannel;
+        this.botStatus = botStatus;
     }
 
     private void startBot() {
+        if (botStatus == "PLAYERCOUNT") {
+            botStatus = "There are 0 players online!";
+
+        }
                 JDABuilder builder = JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new BotCommands())
-                .setActivity(Activity.listening("urmom"));
-        jda = builder.build();
-        // ensure that the provided channel is accessible by the bot
-        System.out.println(statusChannel);
+                .setActivity(Activity.playing(botStatus));
+        try {
+            jda = builder.build().awaitReady();
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Bot failed to start!");
+        }
         TextChannel channel = jda.getTextChannelById(statusChannel);
         if (channel != null) {
-            System.out.println("channel is invalid!!!");
             running = true;
             Eventhandler Eventhandler = new Eventhandler(channel, jda);
+            directory.robert.discordutil.discordbot.events.Eventhandler.serverStartup();
         }
 
     }

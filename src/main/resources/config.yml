@@ -2,3 +2,5 @@
 bot-token:
 # this is the channel you want all the status messages to go into. without this, the plugin will not enable!!
 status-channel:
+# set what you want the bots status to be. Modes are PLAYERCOUNT... Anything else will be the status
+bot-status: PLAYERCOUNT
