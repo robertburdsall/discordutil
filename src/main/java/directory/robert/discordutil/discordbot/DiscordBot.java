@@ -41,7 +41,8 @@ public class DiscordBot extends Thread {
             botStatus = "There are no players online ):";
         }
                 JDABuilder builder = JDABuilder.createDefault(token)
-                .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                GatewayIntent.MESSAGE_CONTENT)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new BotCommands(channels))
                 .setActivity(Activity.playing(botStatus))

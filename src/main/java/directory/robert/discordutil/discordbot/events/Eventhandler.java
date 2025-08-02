@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import directory.robert.discordutil.discordbot.DiscordBot;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -121,6 +122,30 @@ public class Eventhandler {
         eb.setColor(Color.green);
                 CompletableFuture<Boolean> result = new CompletableFuture<>();
                 statusChannel.sendMessageEmbeds(eb.build()).queue(
+                message -> result.complete(true),
+                err -> {
+                    result.complete(false);
+                    throw new RuntimeException("unable to send message!");
+                }
+        );
+        return result.getNow(false);
+    }
+
+        public static boolean playerAdvancementEvent(PlayerAdvancementDoneEvent event) {
+        // if the bot isn't running, return false
+        if (!isActive()) { return false; }
+
+        // transitioning to embeds for important messages
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setTitle(String.format("%s made the advancement **%s**", event.getPlayer().getDisplayName(),event.getAdvancement().getDisplay().getTitle().toString()));
+        String thumbnail = "https://minotar.net/avatar/" + event.getPlayer().getUniqueId() +"/32.png";
+        eb.setThumbnail(thumbnail);
+        eb.setColor(Color.blue);
+
+        // status for if the message successfully sends
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        // send the embed, if it is successful return true, else false
+        statusChannel.sendMessageEmbeds(eb.build()).queue(
                 message -> result.complete(true),
                 err -> {
                     result.complete(false);

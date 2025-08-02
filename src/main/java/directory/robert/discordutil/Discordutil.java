@@ -62,7 +62,6 @@ public final class Discordutil extends JavaPlugin {
 
     public static void sendMessage(String message) {
         Bukkit.getServer().broadcastMessage(message);
-        System.out.println("sending message!");
     }
 
 }
