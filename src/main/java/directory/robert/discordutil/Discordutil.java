@@ -1,5 +1,6 @@
 package directory.robert.discordutil;
 
+import directory.robert.discordutil.commands.linkCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import directory.robert.discordutil.events.listener;
@@ -19,6 +20,8 @@ public final class Discordutil extends JavaPlugin {
         saveDefaultConfig(); // copies default config.yml and puts it in plugin's data folder
         getConfig().options().copyDefaults(true); // merges any new config changes
         saveConfig(); // saves new merged config
+
+        String configVersion = getConfig().getString("config-version");
 
         String botKey = getConfig().getString("bot-token");
         if (botKey == null) {
@@ -46,6 +49,10 @@ public final class Discordutil extends JavaPlugin {
             DiscordBot.start(); // runs bot on its own thread? so sigma.
             // register events
             getServer().getPluginManager().registerEvents(new listener(), this);
+
+            // register commands
+            getCommand("link").setExecutor(new linkCommand());
+
         }
     }
 

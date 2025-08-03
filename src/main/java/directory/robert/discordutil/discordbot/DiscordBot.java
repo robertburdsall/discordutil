@@ -1,7 +1,7 @@
 package directory.robert.discordutil.discordbot;
 
 import directory.robert.discordutil.Discordutil;
-import directory.robert.discordutil.discordbot.commands.BotCommands;
+import directory.robert.discordutil.discordbot.commands.BotListener;
 import directory.robert.discordutil.discordbot.events.Eventhandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -44,7 +44,7 @@ public class DiscordBot extends Thread {
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
                 GatewayIntent.MESSAGE_CONTENT)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .addEventListeners(new BotCommands(channels))
+                .addEventListeners(new BotListener(channels, jda))
                 .setActivity(Activity.playing(botStatus))
                 .setStatus(OnlineStatus.ONLINE);
         try {

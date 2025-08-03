@@ -1,15 +1,20 @@
 package directory.robert.discordutil.discordbot.commands;
 
 import directory.robert.discordutil.Discordutil;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.ChatColor;
 
-public class BotCommands extends ListenerAdapter {
+public class BotListener extends ListenerAdapter {
     private String[] channels;
-    public BotCommands (String[] channels) { this.channels = channels; }
+    private JDA jda;
+
+    public BotListener(String[] channels, JDA jda) {
+        this.channels = channels;
+        this.jda = jda;
+    }
 
     /**
      * Upon receiving a message in the appropriate channel(s), the bot forwards the message to the Minecraft server
@@ -18,6 +23,7 @@ public class BotCommands extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
+        if (event.getAuthor().isBot()) return;
         String channel = event.getChannel().getId();
         boolean included = false;
         for (String id : channels) {
@@ -25,7 +31,7 @@ public class BotCommands extends ListenerAdapter {
         }
         // if the channel isn't one we are reporting, or the author is bot, stop here
         if (!included) return;
-        if (event.getAuthor().isBot()) return;
+
 
 
         // build the string to send to minecraft server
@@ -35,5 +41,20 @@ public class BotCommands extends ListenerAdapter {
         Discordutil.sendMessage(message);
 
     }
+
+
+    // indexing stuff that indexes on bot start
+
+    @Override
+    public void onGuildReady(GuildReadyEvent e) {
+        e.getGuild().loadMembers()
+                .onSuccess(members -> {
+                    
+                })
+                .onError(error -> {
+                    error.printStackTrace();
+                });
+    }
+
 
 }

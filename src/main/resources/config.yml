@@ -1,3 +1,7 @@
+# DO NOT TOUCH!!
+config-version: 1.00
+
+
 # change this upon creating your discord bot with all indents enabled. without this, the plugin will not enable!!
 bot-token:
 # this is the channel you want all the status messages to go into. without this, the plugin will not enable!!

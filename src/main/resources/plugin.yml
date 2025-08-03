@@ -2,3 +2,8 @@ name: discordutil
 version: '1.0-SNAPSHOT'
 main: directory.robert.discordutil.Discordutil
 api-version: '1.20'
+commands:
+  link:
+    description: link your discord and minecraft accounts!
+    usage: /link [Discord username]
+
